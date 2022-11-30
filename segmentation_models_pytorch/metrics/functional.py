@@ -65,7 +65,7 @@ def get_stats(
     ignore_index: Optional[int] = None,
     threshold: Optional[Union[float, List[float]]] = None,
     num_classes: Optional[int] = None,
-) -> Tuple[torch.LongTensor]:
+) -> Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor, torch.LongTensor]:
     """Compute true positive, false positive, false negative, true negative 'pixels'
     for each image and each class.
 
@@ -300,8 +300,8 @@ def _compute_metric(
 
 
 def _fbeta_score(tp, fp, fn, tn, beta=1):
-    beta_tp = (1 + beta ** 2) * tp
-    beta_fn = (beta ** 2) * fn
+    beta_tp = (1 + beta**2) * tp
+    beta_fn = (beta**2) * fn
     score = beta_tp / (beta_tp + beta_fn + fp)
     return score
 
