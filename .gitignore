@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 .idea/
 .venv*
+examples/images*
+examples/annotations*
 
 # C extensions
 *.so
@@ -104,3 +106,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# ruff
+.ruff_cache/

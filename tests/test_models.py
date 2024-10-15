@@ -1,10 +1,6 @@
-import sys
-import mock
 import pytest
 import torch
 
-# mock detection module
-sys.modules["torchvision._C"] = mock.Mock()
 import segmentation_models_pytorch as smp  # noqa
 
 
@@ -26,12 +22,22 @@ DEFAULT_ENCODER = "resnet18"
 
 
 def get_sample(model_class):
-    if model_class in [smp.Unet, smp.Linknet, smp.FPN, smp.PSPNet, smp.UnetPlusPlus, smp.MAnet]:
+    if model_class in [
+        smp.FPN,
+        smp.Linknet,
+        smp.Unet,
+        smp.UnetPlusPlus,
+        smp.MAnet,
+    ]:
         sample = torch.ones([1, 3, 64, 64])
     elif model_class == smp.PAN:
         sample = torch.ones([2, 3, 256, 256])
-    elif model_class == smp.DeepLabV3:
+    elif model_class in [smp.DeepLabV3, smp.DeepLabV3Plus]:
         sample = torch.ones([2, 3, 128, 128])
+    elif model_class in [smp.PSPNet, smp.UPerNet]:
+        # Batch size 2 needed due to nn.BatchNorm2d not supporting (1, C, 1, 1) input
+        # from PSPModule pooling in PSPNet/UPerNet.
+        sample = torch.ones([2, 3, 64, 64])
     else:
         raise ValueError("Not supported model class {}".format(model_class))
     return sample
@@ -53,15 +59,30 @@ def _test_forward_backward(model, sample, test_shape=False):
 
 @pytest.mark.parametrize("encoder_name", ENCODERS)
 @pytest.mark.parametrize("encoder_depth", [3, 5])
-@pytest.mark.parametrize("model_class", [smp.FPN, smp.PSPNet, smp.Linknet, smp.Unet, smp.UnetPlusPlus])
+@pytest.mark.parametrize(
+    "model_class",
+    [smp.FPN, smp.PSPNet, smp.Linknet, smp.Unet, smp.UnetPlusPlus, smp.UPerNet],
+)
 def test_forward(model_class, encoder_name, encoder_depth, **kwargs):
-    if model_class is smp.Unet or model_class is smp.UnetPlusPlus or model_class is smp.MAnet:
+    if (
+        model_class is smp.Unet
+        or model_class is smp.UnetPlusPlus
+        or model_class is smp.MAnet
+    ):
         kwargs["decoder_channels"] = (16, 16, 16, 16, 16)[-encoder_depth:]
-    if model_class in [smp.UnetPlusPlus, smp.Linknet] and encoder_name.startswith("mit_b"):
+    if model_class in [smp.UnetPlusPlus, smp.Linknet] and encoder_name.startswith(
+        "mit_b"
+    ):
         return  # skip mit_b*
-    if model_class is smp.FPN and encoder_name.startswith("mit_b") and encoder_depth != 5:
+    if (
+        model_class is smp.FPN
+        and encoder_name.startswith("mit_b")
+        and encoder_depth != 5
+    ):
         return  # skip mit_b*
-    model = model_class(encoder_name, encoder_depth=encoder_depth, encoder_weights=None, **kwargs)
+    model = model_class(
+        encoder_name, encoder_depth=encoder_depth, encoder_weights=None, **kwargs
+    )
     sample = get_sample(model_class)
     model.eval()
     if encoder_depth == 5 and model_class != smp.PSPNet:
@@ -73,7 +94,19 @@ def test_forward(model_class, encoder_name, encoder_depth, **kwargs):
 
 
 @pytest.mark.parametrize(
-    "model_class", [smp.PAN, smp.FPN, smp.PSPNet, smp.Linknet, smp.Unet, smp.UnetPlusPlus, smp.MAnet, smp.DeepLabV3]
+    "model_class",
+    [
+        smp.PAN,
+        smp.FPN,
+        smp.PSPNet,
+        smp.Linknet,
+        smp.Unet,
+        smp.UnetPlusPlus,
+        smp.MAnet,
+        smp.DeepLabV3,
+        smp.DeepLabV3Plus,
+        smp.UPerNet,
+    ],
 )
 def test_forward_backward(model_class):
     sample = get_sample(model_class)
@@ -82,10 +115,24 @@ def test_forward_backward(model_class):
 
 
 @pytest.mark.parametrize(
-    "model_class", [smp.PAN, smp.FPN, smp.PSPNet, smp.Linknet, smp.Unet, smp.UnetPlusPlus, smp.MAnet]
+    "model_class",
+    [
+        smp.PAN,
+        smp.FPN,
+        smp.PSPNet,
+        smp.Linknet,
+        smp.Unet,
+        smp.UnetPlusPlus,
+        smp.MAnet,
+        smp.DeepLabV3,
+        smp.DeepLabV3Plus,
+        smp.UPerNet,
+    ],
 )
 def test_aux_output(model_class):
-    model = model_class(DEFAULT_ENCODER, encoder_weights=None, aux_params=dict(classes=2))
+    model = model_class(
+        DEFAULT_ENCODER, encoder_weights=None, aux_params=dict(classes=2)
+    )
     sample = get_sample(model_class)
     label_size = (sample.shape[0], 2)
     mask, label = model(sample)

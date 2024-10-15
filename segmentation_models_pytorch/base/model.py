@@ -1,8 +1,10 @@
 import torch
+
 from . import initialization as init
+from .hub_mixin import SMPHubMixin
 
 
-class SegmentationModel(torch.nn.Module):
+class SegmentationModel(torch.nn.Module, SMPHubMixin):
     def initialize(self):
         init.initialize_decoder(self.decoder)
         init.initialize_head(self.segmentation_head)
@@ -10,12 +12,19 @@ class SegmentationModel(torch.nn.Module):
             init.initialize_head(self.classification_head)
 
     def check_input_shape(self, x):
-
         h, w = x.shape[-2:]
         output_stride = self.encoder.output_stride
         if h % output_stride != 0 or w % output_stride != 0:
-            new_h = (h // output_stride + 1) * output_stride if h % output_stride != 0 else h
-            new_w = (w // output_stride + 1) * output_stride if w % output_stride != 0 else w
+            new_h = (
+                (h // output_stride + 1) * output_stride
+                if h % output_stride != 0
+                else h
+            )
+            new_w = (
+                (w // output_stride + 1) * output_stride
+                if w % output_stride != 0
+                else w
+            )
             raise RuntimeError(
                 f"Wrong input shape height={h}, width={w}. Expected image height and width "
                 f"divisible by {output_stride}. Consider pad your images to shape ({new_h}, {new_w})."

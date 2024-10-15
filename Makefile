@@ -4,8 +4,7 @@
 	python3 -m venv .venv
 
 install_dev: .venv
-	.venv/bin/pip install -e .[test]
-	.venv/bin/pre-commit install
+	.venv/bin/pip install -e ".[test]"
 
 test: .venv
 	.venv/bin/pytest -p no:cacheprovider tests/
@@ -16,10 +15,9 @@ table:
 table_timm:
 	.venv/bin/python misc/generate_table_timm.py
 
-black: .venv
-	.venv/bin/black ./segmentation_models_pytorch --config=pyproject.toml --check
+fixup:
+	.venv/bin/ruff check --fix
+	.venv/bin/ruff format
 
-flake8: .venv
-	.venv/bin/flake8 ./segmentation_models_pytorch --config=.flake8
+all: fixup test
 
-all: black flake8 test

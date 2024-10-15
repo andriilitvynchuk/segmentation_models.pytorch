@@ -4,29 +4,29 @@
 **Python library with Neural Networks for Image  
 Segmentation based on [PyTorch](https://pytorch.org/).**  
 
-[![Generic badge](https://img.shields.io/badge/License-MIT-<COLOR>.svg?style=for-the-badge)](https://github.com/qubvel/segmentation_models.pytorch/blob/master/LICENSE) 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/qubvel/segmentation_models.pytorch/tests.yml?branch=master&style=for-the-badge)](https://github.com/qubvel/segmentation_models.pytorch/actions/workflows/tests.yml) 
+[![Generic badge](https://img.shields.io/badge/License-MIT-<COLOR>.svg?style=for-the-badge)](https://github.com/qubvel/segmentation_models.pytorch/blob/main/LICENSE) 
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/qubvel/segmentation_models.pytorch/tests.yml?branch=main&style=for-the-badge)](https://github.com/qubvel/segmentation_models.pytorch/actions/workflows/tests.yml) 
 [![Read the Docs](https://img.shields.io/readthedocs/smp?style=for-the-badge&logo=readthedocs&logoColor=white)](https://smp.readthedocs.io/en/latest/) 
 <br>
 [![PyPI](https://img.shields.io/pypi/v/segmentation-models-pytorch?color=blue&style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/segmentation-models-pytorch/) 
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/segmentation-models-pytorch?style=for-the-badge&color=blue)](https://pepy.tech/project/segmentation-models-pytorch) 
 <br>
 [![PyTorch - Version](https://img.shields.io/badge/PYTORCH-1.4+-red?style=for-the-badge&logo=pytorch)](https://pepy.tech/project/segmentation-models-pytorch) 
-[![Python - Version](https://img.shields.io/badge/PYTHON-3.7+-red?style=for-the-badge&logo=python&logoColor=white)](https://pepy.tech/project/segmentation-models-pytorch) 
+[![Python - Version](https://img.shields.io/badge/PYTHON-3.9+-red?style=for-the-badge&logo=python&logoColor=white)](https://pepy.tech/project/segmentation-models-pytorch) 
 
 </div>
 
 The main features of this library are:
 
- - High level API (just two lines to create a neural network)
- - 9 models architectures for binary and multi class segmentation (including legendary Unet)
+ - High-level API (just two lines to create a neural network)
+ - 10 models architectures for binary and multi class segmentation (including legendary Unet)
  - 124 available encoders (and 500+ encoders from [timm](https://github.com/rwightman/pytorch-image-models))
  - All encoders have pre-trained weights for faster and better convergence
  - Popular metrics and losses for training routines
  
 ### [📚 Project Documentation 📚](http://smp.readthedocs.io/)
 
-Visit [Read The Docs Project Page](https://smp.readthedocs.io/) or read following README to know more about Segmentation Models Pytorch (SMP for short) library
+Visit [Read The Docs Project Page](https://smp.readthedocs.io/) or read the following README to know more about Segmentation Models Pytorch (SMP for short) library
 
 ### 📋 Table of content
  1. [Quick start](#start)
@@ -49,7 +49,7 @@ Visit [Read The Docs Project Page](https://smp.readthedocs.io/) or read followin
 
 #### 1. Create your first Segmentation model with SMP
 
-Segmentation model is just a PyTorch nn.Module, which can be created as easy as:
+The segmentation model is just a PyTorch `torch.nn.Module`, which can be created as easy as:
 
 ```python
 import segmentation_models_pytorch as smp
@@ -66,7 +66,7 @@ model = smp.Unet(
 
 #### 2. Configure data preprocessing
 
-All encoders have pretrained weights. Preparing your data the same way as during weights pre-training may give you better results (higher metric score and faster convergence). It is **not necessary** in case you train the whole model, not only decoder.
+All encoders have pretrained weights. Preparing your data the same way as during weights pre-training may give you better results (higher metric score and faster convergence). It is **not necessary** in case you train the whole model, not only the decoder.
 
 ```python
 from segmentation_models_pytorch.encoders import get_preprocessing_fn
@@ -77,8 +77,8 @@ preprocess_input = get_preprocessing_fn('resnet18', pretrained='imagenet')
 Congratulations! You are done! Now you can train your model with your favorite framework!
 
 ### 💡 Examples <a name="examples"></a>
- - Training model for pets binary segmentation with Pytorch-Lightning [notebook](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/binary_segmentation_intro.ipynb) and [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/qubvel/segmentation_models.pytorch/blob/master/examples/binary_segmentation_intro.ipynb)
- - Training model for cars segmentation on CamVid dataset [here](https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb).
+ - Training model for pets binary segmentation with Pytorch-Lightning [notebook](https://github.com/qubvel/segmentation_models.pytorch/blob/main/examples/binary_segmentation_intro.ipynb) and [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/qubvel/segmentation_models.pytorch/blob/main/examples/binary_segmentation_intro.ipynb)
+ - Training model for cars segmentation on CamVid dataset [here](https://github.com/qubvel/segmentation_models.pytorch/blob/main/examples/cars%20segmentation%20(camvid).ipynb).
  - Training SMP model with [Catalyst](https://github.com/catalyst-team/catalyst) (high-level framework for PyTorch), [TTAch](https://github.com/qubvel/ttach) (TTA library for PyTorch) and [Albumentations](https://github.com/albu/albumentations) (fast image augmentation library) - [here](https://github.com/catalyst-team/catalyst/blob/v21.02rc0/examples/notebooks/segmentation-tutorial.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/catalyst-team/catalyst/blob/v21.02rc0/examples/notebooks/segmentation-tutorial.ipynb)
  - Training SMP model with [Pytorch-Lightning](https://pytorch-lightning.readthedocs.io) framework - [here](https://github.com/ternaus/cloths_segmentation) (clothes binary segmentation by [@ternaus](https://github.com/ternaus)).
 
@@ -94,6 +94,7 @@ Congratulations! You are done! Now you can train your model with your favorite f
  - PAN [[paper](https://arxiv.org/abs/1805.10180)] [[docs](https://smp.readthedocs.io/en/latest/models.html#pan)]
  - DeepLabV3 [[paper](https://arxiv.org/abs/1706.05587)] [[docs](https://smp.readthedocs.io/en/latest/models.html#deeplabv3)]
  - DeepLabV3+ [[paper](https://arxiv.org/abs/1802.02611)] [[docs](https://smp.readthedocs.io/en/latest/models.html#id9)]
+ - UPerNet [[paper](https://arxiv.org/abs/1807.10221)] [[docs](https://smp.readthedocs.io/en/latest/models.html#upernet)]
 
 #### Encoders <a name="encoders"></a>
 
@@ -465,7 +466,7 @@ $ pip install git+https://github.com/qubvel/segmentation_models.pytorch
 ### 🏆 Competitions won with the library
 
 `Segmentation Models` package is widely used in the image segmentation competitions.
-[Here](https://github.com/qubvel/segmentation_models.pytorch/blob/master/HALLOFFAME.md) you can find competitions, names of the winners and links to their solutions.
+[Here](https://github.com/qubvel/segmentation_models.pytorch/blob/main/HALLOFFAME.md) you can find competitions, names of the winners and links to their solutions.
 
 ### 🤝 Contributing
 
@@ -475,16 +476,16 @@ $ pip install git+https://github.com/qubvel/segmentation_models.pytorch
 make install_dev  # create .venv, install SMP in dev mode
 ```
 
-#### Run tests and code checks  
+#### Run tests and code checks
 
 ```bash
-make all          # run flake8, black, tests
+make fixup         # Ruff for formatting and lint checks
 ```
 
 #### Update table with encoders  
 
 ```bash
-make table        # generate table with encoders and print to stdout
+make table        # generate a table with encoders and print to stdout
 ```
 
 ### 📝 Citing
@@ -500,4 +501,4 @@ make table        # generate table with encoders and print to stdout
 ```
 
 ### 🛡️ License <a name="license"></a>
-Project is distributed under [MIT License](https://github.com/qubvel/segmentation_models.pytorch/blob/master/LICENSE)
+The project is distributed under [MIT License](https://github.com/qubvel/segmentation_models.pytorch/blob/main/LICENSE)
